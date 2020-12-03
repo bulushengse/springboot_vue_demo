@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sbootvue.project.system.mapper.SysTestMapper">
+    
+    <resultMap type="SysTest" id="SysTestResult">
+		<id     property="testId"    column="test_id"  />
+		<result property="testContent"    column="test_content" />
+		<result property="testRank"    column="test_rank" />
+		<result property="testResult"    column="test_result" />
+		<result property="createBy"    column="create_by" />
+		<result property="createTime"    column="create_time" />
+		<result property="updateBy"    column="update_by" />
+		<result property="updateTime"    column="update_time" />
+		<result property="remark"    column="remark" />
+		<result property="fid"    column="fid" />
+    </resultMap>
+
+    <sql id="selectSysTestVo">
+        select test_id, test_content, test_rank, test_result, create_by, create_time, update_by, update_time, remark, fid from sys_test
+    </sql>
+
+    <select id="selectSysTestList" parameterType="SysTest" resultMap="SysTestResult">
+        <include refid="selectSysTestVo"/>
+        <where>  
+            <if test="testContent != null  and testContent != ''"> and test_content = #{testContent}</if>
+            <if test="testRank != null  and testRank != ''"> and test_rank = #{testRank}</if>
+            <if test="testResult != null  and testResult != ''"> and test_result = #{testResult}</if>
+            <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+                and create_time &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+                and create_time &lt;= #{endTime}
+            </if>  
+        </where>
+    </select>
+    
+    <select id="selectSysTestById" parameterType="String" resultMap="SysTestResult">
+        <include refid="selectSysTestVo"/>
+        where test_id = #{testId}
+    </select>
+        
+    <insert id="insertSysTest" parameterType="SysTest">
+    	<selectKey keyProperty="testId"  resultType="java.lang.String" order="AFTER">
+ 			select seq_sys_test.currval from dual
+ 		</selectKey>
+        insert into sys_test
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+		 	test_id,
+    		<if test="testContent != null  and testContent != ''">test_content,</if>
+    		<if test="testRank != null  and testRank != ''">test_rank,</if>
+    		<if test="testResult != null  and testResult != ''">test_result,</if>
+    		<if test="createBy != null  and createBy != ''">create_by,</if>
+			create_time,
+    		<if test="remark != null  and remark != ''">remark,</if>
+    		<if test="fid != null  and fid != ''">fid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			seq_sys_test.nextval,
+    		<if test="testContent != null  and testContent != ''">#{testContent},</if>
+    		<if test="testRank != null  and testRank != ''">#{testRank},</if>
+    		<if test="testResult != null  and testResult != ''">#{testResult},</if>
+    		<if test="createBy != null  and createBy != ''">#{createBy},</if>
+			to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),
+    		<if test="remark != null  and remark != ''">#{remark},</if>
+    		<if test="fid != null  and fid != ''">#{fid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysTest" parameterType="SysTest">
+        update sys_test
+        <trim prefix="SET" suffixOverrides=",">
+    		<if test="testContent != null  and testContent != ''">test_content = #{testContent},</if>
+    		<if test="testRank != null  and testRank != ''">test_rank = #{testRank},</if>
+    		<if test="testResult != null  and testResult != ''">test_result = #{testResult},</if>
+    		<if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+			update_time = to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),
+    		<if test="remark != null  and remark != ''">remark = #{remark},</if>
+    		<if test="fid != null  and fid != ''">fid = #{fid},</if>
+        </trim>
+        where test_id = #{testId}
+    </update>
+
+    <delete id="deleteSysTestById" parameterType="String">
+        delete from sys_test where test_id = #{testId}
+    </delete>
+
+    <delete id="deleteSysTestByIds" parameterType="String">
+        delete from sys_test where test_id in 
+        <foreach item="testId" collection="array" open="(" separator="," close=")">
+            #{testId}
+        </foreach>
+    </delete>
+    
+</mapper>

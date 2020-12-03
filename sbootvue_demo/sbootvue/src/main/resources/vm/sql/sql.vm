@@ -1,0 +1,28 @@
+-- 菜单 SQL
+insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values(seq_sys_menu.nextval, '${functionName}', '${parentMenuId}', '1', '${businessName}', '${moduleName}/${businessName}/index', 1, 'C', '0', '${permissionPrefix}:list', '#', 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), 'ry', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), '${functionName}菜单');
+
+commit;
+
+declare 
+  parent_id varchar2(20);
+begin
+  select seq_sys_menu.currval into parent_id from dual;
+
+-- 按钮 SQL
+insert into sys_menu  (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values(seq_sys_menu.nextval, '${functionName}查询', parent_id, '1',  '#', '', 1,  'F', '0', '${permissionPrefix}:query',         '#', 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), '');
+
+insert into sys_menu  (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values(seq_sys_menu.nextval, '${functionName}新增', parent_id, '2',  '#', '', 1,  'F', '0', '${permissionPrefix}:add',          '#', 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), '');
+
+insert into sys_menu  (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values(seq_sys_menu.nextval, '${functionName}修改', parent_id, '3',  '#', '', 1,  'F', '0', '${permissionPrefix}:edit',         '#', 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), '');
+
+insert into sys_menu  (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values(seq_sys_menu.nextval, '${functionName}删除', parent_id, '4',  '#', '', 1,  'F', '0', '${permissionPrefix}:remove',       '#', 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), '');
+
+insert into sys_menu  (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+values(seq_sys_menu.nextval, '${functionName}导出', parent_id, '5',  '#', '', 1,  'F', '0', '${permissionPrefix}:export',       '#', 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), 'admin', to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'), '');
+
+end;
